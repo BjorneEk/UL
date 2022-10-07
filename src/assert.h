@@ -10,12 +10,14 @@
 #define _ASSERT_H_
 
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include "types.h"
+#include "macro.h"
 
-#define CAT(a, ...) PRIMITIVE_CAT(a, __VA_ARGS__)
-#define PRIMITIVE_CAT(a, ...) a ## __VA_ARGS__
-
+extern char *strerror(int errnum);
+extern int memcmp(const void *a, const void *b, unsigned long l);
 
 #define log_err_none(err) {\
     fprintf(stderr, "[\033[31;1;4mError\033[0m]: %s | %s\n",(err), strerror( errno ));\
@@ -64,6 +66,7 @@
  *  if assertion is false
  **/
 #define assert(c, msg) if(!(c)) {log_err(none)((msg)); exit(1);}
+#define asserts(c, msg, str) if(!(c)) {log_err(string)((msg), (str)); exit(1);}
 
 
 /**

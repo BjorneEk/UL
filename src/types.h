@@ -9,6 +9,7 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
+#include <stdbool.h>
 
 typedef unsigned char      u8_t;
 typedef unsigned short     u16_t;

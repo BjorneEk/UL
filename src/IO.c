@@ -5,17 +5,15 @@
  * Util-Library IO res
  *
  *==========================================================*/
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+
 #include "IO.h"
 #include "assert.h"
-#include "general.h"
-#include <errno.h>
+#include "str.h"
 
-i32_t read_file(const char * filename, char * res)
+
+i64_t read_file(const char * filename, char * res)
 {
-  size_t new_len;
+  i64_t new_len;
   long buffer_size;
   FILE * fp;
 
