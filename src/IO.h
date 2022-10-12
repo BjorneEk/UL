@@ -16,7 +16,7 @@
  *  allocates space and reads the file contents from the file into the
  *  res string, returns the length of the string
  **/
-i64_t read_file(const char * filename, char * res);
+i64_t read_file(const char * filename, char ** res);
 
 /**
  *  prints (len) bytes of data in hexdump format

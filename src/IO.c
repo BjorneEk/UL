@@ -11,7 +11,7 @@
 #include "str.h"
 
 
-i64_t read_file(const char * filename, char * res)
+i64_t read_file(const char * filename, char ** res)
 {
   i64_t new_len;
   long buffer_size;
@@ -25,17 +25,17 @@ i64_t read_file(const char * filename, char * res)
     buffer_size = ftell(fp);
     assert(buffer_size != -1, "Error reading file");
     /* Allocate our buffer to that size. */
-    res = malloc(sizeof(char) * (buffer_size + 1));
-    assert(res != NULL, "Out of memory");
+    *res = malloc(sizeof(char) * (buffer_size + 1));
+    assert(*res != NULL, "Out of memory");
 
     /* Go back to the start of the file. */
     assert(fseek(fp, 0L, SEEK_SET) == 0, "Error reading file");
 
     /* Read the entire file into memory. */
-    new_len = fread(res, sizeof(char), buffer_size, fp);
+    new_len = fread(*res, sizeof(char), buffer_size, fp);
 
     assert(ferror( fp ) == 0, "Error reading file");
-    res[new_len++] = '\0'; /* Just to be safe. */
+    (*res)[new_len++] = '\0'; /* Just to be safe. */
   }
   fclose(fp);
   return new_len;
