@@ -7,8 +7,8 @@
  *
  *==========================================================*/
 
-#ifndef _UTIL_H_
-#define _UTIL_H_
+#ifndef _UL_UTIL_H_
+#define _UL_UTIL_H_
 
 #include "types.h"
 
@@ -60,4 +60,4 @@ i64_t CSV_iarr(i32_t ** res, char * data, char del);
  **/
 i64_t CSV_farr(f64_t ** res, char * data, char del);
 
-#endif /* _UTIL_H_ */
+#endif /* _UL_UTIL_H_ */

@@ -6,8 +6,8 @@
  *
  *==========================================================*/
 
-#ifndef _TYPES_H_
-#define _TYPES_H_
+#ifndef _UL_TYPES_H_
+#define _UL_TYPES_H_
 
 #include <stdbool.h>
 

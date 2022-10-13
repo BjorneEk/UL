@@ -6,8 +6,8 @@
  *
  *==========================================================*/
 
-#ifndef _ASSERT_H_
-#define _ASSERT_H_
+#ifndef _UL_ASSERT_H_
+#define _UL_ASSERT_H_
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -78,4 +78,4 @@ extern int memcmp(const void *a, const void *b, unsigned long l);
  **/
 #define assert_err(c, msg) if(!(c)) {log_err(none)((msg))}
 
-#endif /* _ASSERT_H_ */
+#endif /* _UL_ASSERT_H_ */
