@@ -13,6 +13,18 @@
 
 #define RAND_MAX 0x7fffffff
 
+
+#define PI_HALF 1.57079632679489661923132169163975144
+#define PI      3.14159265358979323846264338327950288
+#define TWO_PI  6.28318530717958647692528676655900576
+
+/**
+ * RAD_IN_DEG = 180 / PI
+ * DEG_IN_RAD = PI / 180
+ **/
+#define RAD_IN_DEG 57.295779513082320876798154814105170408
+#define DEG_IN_RAD 0.017453292519943295769236907684886127
+
 /**
  * the lowest 16 bits in a 32 bit integer
  **/
@@ -31,10 +43,6 @@
  **/
 #define HIGH_8(word) ((u8_t)(((word) >> 8) & 0xFF))
 
-
-#define COSF(_x) ((f32_t)cos(_x))
-#define SINF(_x) ((f32_t)sin(_x))
-
 #define MAX(a, b) ({\
   __typeof__ (a) _a = (a); \
   __typeof__ (b) _b = (b); \
@@ -44,6 +52,16 @@
   __typeof__ (a) _a = (a); \
   __typeof__ (b) _b = (b); \
   _a < _b ? _a : _b; })
+
+#define COSF(_x) ((f32_t)cos(_x))
+#define SINF(_x) ((f32_t)sin(_x))
+
+#define deg_to_rad(_x) ((_x) * (__typeof__(_x)) (DEG_IN_RAD))
+#define rad_to_deg(_x) ((_x) * (__typeof__(_x)) (RAD_IN_DEG))
+#define sign(v) ((v > 0.0) - (v < 0.0))
+#define clamp(v, min, max) (MIN(MAX((val), (min)), (max)))
+
+
 
 /**
  * returns a random f64_t within the specified range [min, max)

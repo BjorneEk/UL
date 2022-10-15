@@ -19,63 +19,44 @@
 extern char *strerror(int errnum);
 extern int memcmp(const void *a, const void *b, unsigned long l);
 
-#define log_err_none(err) {\
-    fprintf(stderr, "[\033[31;1;4mError\033[0m]: %s | %s\n",(err), strerror( errno ));\
-}
-#define log_err_string(err, str) {\
-    fprintf(stderr, "[\033[31;1;4mError\033[0m]: %s: '%s' | %s\n",(err), (str), strerror( errno ));\
-}
-#define log_err_int(err, i) {\
-    fprintf(stderr, "[\033[31;1;4mError\033[0m]: %s: %i | %s\n",(err), (i), strerror( errno ));\
-}
-#define log_err_float(err, f) {\
-    fprintf(stderr, "[\033[31;1;4mError\033[0m]: %s: %f | %s\n",(err), (f), strerror( errno ));\
-}
-#define log_err_char(err, c) {\
-    fprintf(stderr, "[\033[31;1;4mError\033[0m]: %s: '%c' | %s\n",(err), (c), strerror( errno ));\
-}
-#define log_warn_none(warn) {\
-  printf("[\033[33;1;4mWarning\033[0m]: %s\n", (warn));\
-}
-#define log_warn_string(warn, str) {\
-  printf("[\033[33;1;4mWarning\033[0m]: %s: '%s'\n", (warn), (str));\
-}
-#define log_warn_int(warn, i) {\
-  printf("[\033[33;1;4mWarning\033[0m]: %s: %i\n", (warn), (i));\
-}
-#define log_warn_float(warn, f) {\
-  printf("[\033[33;1;4mWarning\033[0m]: %s: %f\n", (warn), (f));\
-}
-#define log_warn_char(warn, c) {\
-  printf("[\033[33;1;4mWarning\033[0m]: %s: '%c'\n", (warn), (c));\
-}
-
-/**
- *  display error and warning macros, called like this:
- *  log_err(type)(error_meessage, param), eg:
- *  char * filename = "myfile.txt"
- *  log_err(string)("reading file", filename);
- *
- *  types are: none, string, char, int, float
- **/
-#define log_err(t) CAT(log_err_, t)
-#define log_warn(t) CAT(log_warn_, t)
-
-/**
- *  simple assert macro, display error and exit with exit status 1
- *  if assertion is false
- **/
-#define assert(c, msg) if(!(c)) {log_err(none)((msg)); exit(1);}
-#define asserts(c, msg, str) if(!(c)) {log_err(string)((msg), (str)); exit(1);}
+#define ERR_LBL  "[\033[31;1;4mError\033[0m]"
+#define WARN_LBL "[\033[33;1;4mWarning\033[0m]"
 
 
-/**
- *  display warning when assertion is false
- **/
-#define assert_warn(c, msg) if(!(c)) {log_warn(none)((msg))}
-/**
- *  display warning when assertion is false
- **/
-#define assert_err(c, msg) if(!(c)) {log_err(none)((msg))}
+#define log_err(_fmt, ...) do {                                                 \
+        fprintf(stderr, ERR_LBL ": " _fmt, __VA_ARGS__);                        \
+        } while(0)
+
+#define log_warn(_fmt, ...) do {                                                \
+        fprintf(stderr, WARN_LBL ": " _fmt, __VA_ARGS__);                       \
+        } while(0)
+
+/*
+ *  if as_ is false log the formated error and exit
+ */
+#define assertf(as_, format, ...) do{                                           \
+        if(!(as_)) {                                                            \
+                log_err(format, __VA_ARGS__);                                   \
+                exit(1);                                                        \
+        }                                                                       \
+        }while(0)
+/*
+ *  if as_ is false log the formated error goto exit label
+ */
+#define assertf_to(as_, exit, format, ...) do{                                  \
+        if(!(as_)) {                                                            \
+                log_err(format, __VA_ARGS__);                                   \
+                goto exit;                                                      \
+        }                                                                       \
+        }while(0)
+
+/*
+ *  if as_ is false log a error and exit whith status 1
+ */
+#define assert(c_) assertf(c_, "assertion error")
+/*
+ *  if as_ is false log a error and goto lbl
+ */
+#define assert_to(c_, lbl) assertf_to(c_, lbl, "assertion error")
 
 #endif /* _UL_ASSERT_H_ */

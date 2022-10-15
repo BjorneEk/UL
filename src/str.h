@@ -11,7 +11,7 @@
 #define _UL_UTIL_H_
 
 #include "types.h"
-
+#include "macro.h"
 /**
  * returns true if i is a ascii character
  **/
@@ -25,7 +25,7 @@ i64_t indexof(const char * str, char ch);
 /**
  * places *c at the index of ch in *c or at the end if no instance exists
  **/
-void moveto(char **c, char ch);
+void moveto(char ** c, char ch);
 
 /**
  * returns the number of digits in a int
@@ -35,13 +35,18 @@ u32_t nbr_of_digits(u64_t n, u32_t base);
 /**
  * converts a int array to a string, (allocates the string)
  **/
-char * iarrtos(i32_t * data, i64_t length);
+char * WUNUSED iarrtos(i32_t * data, i64_t length);
 
 /**
  * converts a double array to a string, (allocates the string)
  **/
-char * farrtos(f64_t * data, i64_t length);
+char * WUNUSED farrtos(f64_t * data, i64_t length);
 
+
+/**
+ * returns the number of values in a string where values are separated by delim
+ **/
+i64_t nvals(const char * buff, char delim);
 /**
  * converts a CSV string array to a int array, returns the length
  *
