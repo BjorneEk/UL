@@ -23,13 +23,10 @@ extern int memcmp(const void *a, const void *b, unsigned long l);
 #define WARN_LBL "[\033[33;1;4mWarning\033[0m]"
 
 
-#define log_err(_fmt, ...) do {                                                 \
-        fprintf(stderr, ERR_LBL ": " _fmt, __VA_ARGS__);                        \
-        } while(0)
+#define log_err(_fmt, ...) fprintf(stderr, ERR_LBL ": " _fmt, __VA_ARGS__)
 
-#define log_warn(_fmt, ...) do {                                                \
-        fprintf(stderr, WARN_LBL ": " _fmt, __VA_ARGS__);                       \
-        } while(0)
+
+#define log_warn(_fmt, ...) fprintf(stderr, WARN_LBL ": " _fmt, __VA_ARGS__)
 
 /*
  *  if as_ is false log the formated error and exit
