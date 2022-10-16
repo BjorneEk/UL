@@ -9,6 +9,7 @@
 #ifndef _UL_MATH_H_
 #define _UL_MATH_H_
 
+#include <math.h>
 #include "types.h"
 
 #define RAND_MAX 0x7fffffff
@@ -55,6 +56,8 @@
 
 #define COSF(_x) ((f32_t)cos(_x))
 #define SINF(_x) ((f32_t)sin(_x))
+#define COS2F(_x) ((f32_t) (cos(_x) * cos(_x)) )
+#define SIN2F(_x) ((f32_t) (sin(_x) * sin(_x)) )
 
 #define deg_to_rad(_x) ((_x) * (__typeof__(_x)) (DEG_IN_RAD))
 #define rad_to_deg(_x) ((_x) * (__typeof__(_x)) (RAD_IN_DEG))
