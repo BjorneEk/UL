@@ -42,13 +42,31 @@ i64_t read_file_to(const char *fname, char **res)
 
 char * WUNUSED read_file(const char *fname, i64_t *len)
 {
+        i64_t new_len;
+        i64_t flen;
+        FILE *fp;
         char * res;
+        fp = fopen(fname, "r");
+        assertf(fp != NULL, "could not read from file: %s", fname);
 
-        if(len != NULL)
-                *len = read_file_to(fname, &res);
-        else
-                read_file_to(fname, &res);
+        if (fseek(fp, 0L, SEEK_END) == 0) {
+                /* Get the size of the file. */
+                flen = ftell(fp);
+                assertf(flen != -1, "Error reading file: %s", fname);
+                /* Allocate our buffer to that size. */
+                res = malloc(sizeof(char) * (flen + 1));
+                assertf(res != NULL, "Out of memory (read_file): %s", fname);
 
+                /* Go back to the start of the file. */
+                assertf(fseek(fp, 0L, SEEK_SET) == 0,"Error reading file: %s", fname);
+
+                /* Read the entire file into memory. */
+                new_len = fread(res, sizeof(char), flen, fp);
+
+                assertf(ferror( fp ) == 0, "Error reading file: %s", fname);
+                res[new_len] = '\0'; /* Just to be safe. */
+        }
+        if (len != NULL) *len = new_len;
         return res;
 }
 
