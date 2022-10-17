@@ -26,7 +26,7 @@ extern int memcmp(const void *a, const void *b, unsigned long l);
 #define log_err(_fmt, ...) fprintf(stderr, ERR_LBL ": " _fmt, __VA_ARGS__)
 
 
-#define log_warn(_fmt, ...) fprintf(stderr, WARN_LBL ": " _fmt, __VA_ARGS__)
+#define log_warn(_fmt, ...) printf(WARN_LBL ": " _fmt, __VA_ARGS__)
 
 /*
  *  if as_ is false log the formated error and exit
