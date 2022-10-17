@@ -3,7 +3,9 @@
 
 #include "../UL.h"
 #include <stdio.h>
-
+extern void test_read_file();
+extern void test_write_file();
+extern void test_append_file();
 int main(int argc, char const *argv[])
 {
   printf("TESTING\n");
@@ -27,5 +29,8 @@ int main(int argc, char const *argv[])
   cnt = CSV_farr(&res2, fcsv, ',');
   for(i=0;i<cnt;i++)printf("%f, ", res2[i]);
   printf("size: %i\n", cnt);
+  test_read_file();
+  test_write_file();
+  test_append_file();
   return 0;
 }

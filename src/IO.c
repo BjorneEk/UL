@@ -9,65 +9,139 @@
 #include "IO.h"
 #include "assert.h"
 #include "str.h"
+#include <sys/stat.h>
+#include <unistd.h>
+#include <string.h>
 
-
-i64_t read_file_to(const char *fname, char **res)
+i64_t get_filesize(const char *fname)
 {
-        i64_t len;
-        i64_t flen;
-        FILE *fp;
-
-        fp = fopen(fname, "r");
-        assertf(fp != NULL, "could not read from file: %s", fname);
-
-        if (fseek(fp, 0L, SEEK_END) == 0) {
-                /* Get the size of the file. */
-                flen = ftell(fp);
-                assertf(flen != -1, "Error reading file: %s", fname);
-                /* Allocate our buffer to that size. */
-                *res = malloc(sizeof(char) * (flen + 1));
-                assertf(*res != NULL, "Out of memory (read_file): %s", fname);
-
-                /* Go back to the start of the file. */
-                assertf(fseek(fp, 0L, SEEK_SET) == 0,"Error reading file: %s", fname);
-
-                /* Read the entire file into memory. */
-                len = fread(*res, sizeof(char), flen, fp);
-
-                assertf(ferror( fp ) == 0, "Error reading file: %s", fname);
-                *res[len] = '\0'; /* Just to be safe. */
-        }
-        return len;
+        struct stat sb;
+        stat(fname, &sb);
+        return sb.st_size;
 }
 
-char * WUNUSED read_file(const char *fname, i64_t *len)
+BOOL remove_file(const char *fname)
 {
-        i64_t new_len;
+        i32_t res;
+        res = remove(fname);
+        return  !!res;
+}
+
+void create_file(const char *fname)
+{
+        FILE *fp;
+        fp = fopen(fname, "a");
+        assertf(fp != NULL, "could not create file: %s", fname);
+        fclose(fp);
+}
+
+BOOL rename_file(const char *src, const char *fname)
+{
+        i32_t res;
+        res = rename(src, fname);
+        return  !!res;
+}
+
+BOOL file_exists(const char *fname)
+{
+        return !access(fname, F_OK);
+}
+
+BOOL file_can_read(const char *fname)
+{
+        return !access(fname, R_OK);
+}
+
+BOOL file_can_write(const char *fname)
+{
+        return !access(fname, W_OK);
+}
+
+BOOL file_can_exec(const char *fname)
+{
+        return !access(fname, X_OK);
+}
+
+
+
+u8_t * WUNUSED read_file(const char *fname, i64_t *len)
+{
         i64_t flen;
         FILE *fp;
-        char * res;
+        u8_t *res;
+        i32_t er;
         fp = fopen(fname, "r");
-        assertf(fp != NULL, "could not read from file: %s", fname);
+        assertf(fp != NULL, "could not open file: '%s' for reading", fname);
 
-        if (fseek(fp, 0L, SEEK_END) == 0) {
-                /* Get the size of the file. */
-                flen = ftell(fp);
-                assertf(flen != -1, "Error reading file: %s", fname);
-                /* Allocate our buffer to that size. */
-                res = malloc(sizeof(char) * (flen + 1));
-                assertf(res != NULL, "Out of memory (read_file): %s", fname);
+        flen = get_filesize(fname);
 
-                /* Go back to the start of the file. */
-                assertf(fseek(fp, 0L, SEEK_SET) == 0,"Error reading file: %s", fname);
+        assertf_to(flen > 0, exit,
+                "reading file: %s, filesize: %li", fname, flen);
 
-                /* Read the entire file into memory. */
-                new_len = fread(res, sizeof(char), flen, fp);
+        res = malloc(sizeof(char) * (flen + 1));
+        assertf_to(res != NULL, exit, "Out of memory (read_file): %s", fname);
 
-                assertf(ferror( fp ) == 0, "Error reading file: %s", fname);
-                res[new_len] = '\0'; /* Just to be safe. */
-        }
-        if (len != NULL) *len = new_len;
+        fread(res, sizeof(char), flen, fp);
+
+        er = ferror(fp);
+        assertf_to(er == 0, exit_free_res, "reading file: %s", fname);
+
+        fclose(fp);
+        if (len != NULL) *len = flen;
         return res;
+
+exit_free_res:
+        free(res);
+exit:
+        fclose(fp);
+        exit(-1);
+}
+
+char * WUNUSED read_sfile(const char *fname, i64_t *len)
+{
+        char * res;
+        i64_t flen;
+        res = (char*)read_file(fname, &flen);
+        res[flen]  = '\0';
+        if (len != NULL) *len = flen;
+        return res;
+}
+static void nwrite_file_mode(const char *fname, const char *str, u64_t n, const char *mode)
+{
+        FILE *fp;
+        u64_t wbytes;
+        fp = fopen(fname, mode);
+        assertf(fp != NULL, "could not open file: '%s' for writing", fname);
+
+        wbytes = fwrite(str, sizeof(char), n, fp);
+        assertf_to(wbytes == n,
+                exit, "writing to '%s', wrote %llu bytes instead of expected %llu bytes",
+                fname, wbytes, n);
+        fclose(fp);
+        return;
+exit:
+        fclose(fp);
+        exit(-1);
+}
+
+void nwrite_file(const char *fname, const char *str, u64_t n)
+{
+        nwrite_file_mode(fname, str, n, "w");
+}
+
+void write_file(const char *fname, const char *str)
+{
+        nwrite_file(fname, str, strlen(str));
+}
+
+void nappend_file(const char *fname, const char *str, u64_t n)
+{
+        nwrite_file_mode(fname, str, n, "a");
+}
+
+void append_file(const char *fname, const char *str)
+{
+        nwrite_file_mode(fname, str, strlen(str), "a");
 }
 
 static inline BOOL is_repetition(const u8_t * data, i32_t i)
@@ -86,7 +160,6 @@ void hexdump(const u8_t * data, u64_t len)
          for (i = r = cnt = 0; i < len; i += 0x10) {
                  if(i != 0 && !is_repetition(data, i))
                          r = 1; cnt++; continue;
-
 
                 if (r) {
                         printf("│*%7i │                         │   "
