@@ -111,6 +111,15 @@ static struct bucket *
 void  HMAP_add(hashmap_t *m, void *key, u64_t kwidth, void *value);
 
 /**
+ * adds a entry created by copies of @key and @value to the hashmap
+ *
+ * @param m     : the hashmap
+ * @param key   : the key to the entry
+ * @param kwidth: the width in bytes of the @key
+ * @param value : the value to be added
+ **/
+void  HMAP_addcpy(hashmap_t *m, void *key, u64_t kwidth, void *value);
+/**
  * returns a heap allocated array of all the kvpairs in the hashmap
  *
  * @param m: the hashmap

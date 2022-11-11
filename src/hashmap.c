@@ -189,6 +189,18 @@ void  HMAP_add(hashmap_t *m, void *key, u64_t kwidth, void *value)
                 b->next = new_bucketptr(m, key, kwidth, value);
         }
 }
+
+void  HMAP_addcpy(hashmap_t *m, void *key, u64_t kwidth, void *value)
+{
+        void *kcpy;
+        void *vcpy;
+
+        kcpy = malloc(kwidth);
+        vcpy = malloc(m->vwidth);
+        memcpy(kcpy, key, kwidth);
+        memcpy(vcpy, value, m->vwidth);
+        HMAP_add(m, kcpy, kwidth, vcpy);
+}
 void  HMAP_add_kvpair(hashmap_t *m, struct kvpair kvp)
 {
         u64_t i;
