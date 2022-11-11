@@ -66,6 +66,8 @@ typedef signed long        i64_t;
 
 typedef float              f32_t;
 typedef double             f64_t;
+
+typedef i32_t (*compare_f)(const void *a, const void *b);
 ```
 
 ---
