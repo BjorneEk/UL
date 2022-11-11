@@ -14,7 +14,7 @@
     2. [```nbr_of_digits```](#nbr_of_digits)
     3. [```iarrtos```](#iarrtos)
     4. [```farrtos```](#farrtos)
-    5. [```nvals```](#nvals)
+    5. [```strcnt```](#strcnt)
     6. [```CSV_iarr```](#CSV_iarr)
     6. [```CSV_farr```](#CSV_farr)
 4. [<UL/IO.h>](#io)
@@ -132,12 +132,12 @@ char * iarrtos(i32_t * data, i64_t length);
 char * farrtos(f64_t * data, i64_t length);
 ```
 'double array to string', allocates and returns a comma delimited string representation of the first ```@length``` f64_t´s in ```@data```.
-### nvals <a name="nvals"></a>
+### strcnt <a name="strcnt"></a>
 ```c
-i64_t nvals(const char * buff, char delim);
+i64_t strcnt(const char * buff, char delim);
 ```
-returns the number of enties in ```@buff``` separated by ```@delim```,
-useful for example to count number of values in a csv file eg. ```nvals("data.csv", ',');```.
+returns the number of words in ```@buff``` separated by ```@delim```,
+useful for example to count number of values in a csv file eg. ```strcnt("data.csv", ',');``` or the number of arguments in a string command.
 ### CSV_iarr <a name="CSV_iarr"></a>
 ```c
 i64_t CSV_iarr(i32_t ** res, char * data, char del);

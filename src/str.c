@@ -98,12 +98,12 @@ char * WUNUSED farrtos(f64_t * data, i64_t length)
 }
 
 /**
- * retuns the number of values in a string where they are separated by `delim`
+ * returns the number of words in a string where words are separated by delim
  **/
-i64_t nvals(const char * buff, char delim)
+u64_t strcnt(const char * buff, char delim)
 {
         const char * c;
-        i64_t res;
+        u64_t res;
 
         for(c = buff, res = 0; *c != '\0'; res += (*c == delim), c++);
         res += (*--c != delim);

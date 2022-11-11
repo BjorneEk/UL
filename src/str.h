@@ -44,9 +44,12 @@ char * WUNUSED farrtos(f64_t * data, i64_t length);
 
 
 /**
- * returns the number of values in a string where values are separated by delim
+ * returns the number of words in a string where words are separated by delim
  **/
-i64_t nvals(const char * buff, char delim);
+u64_t strcnt(const char * buff, char delim);
+
+
+
 /**
  * converts a CSV string array to a int array, returns the length
  *
