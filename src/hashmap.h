@@ -10,7 +10,7 @@
 #define _UL_HASHMAP_H_
 
 #include "hash.h"
-#include <UL/types.h>
+#include "types.h"
 
 
 struct kvpair
