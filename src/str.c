@@ -115,7 +115,7 @@ i64_t CSV_iarr(i32_t ** res, char * data, char del)
         char *c;
         i64_t cnt, i;
 
-        cnt = nvals(data, del);
+        cnt = strcnt(data, del);
 
         *res = malloc(cnt * sizeof(i32_t));
         assertf(*res != NULL,"%s", "Out of memory (CSV_iarr)");
@@ -134,7 +134,7 @@ i64_t CSV_farr(f64_t ** res, char * data, char del)
         char *c, tmp[100];
         i64_t cnt, i;
 
-        cnt = nvals(data, del);
+        cnt = strcnt(data, del);
 
         *res = malloc(cnt * sizeof(f64_t));
         assertf(*res != NULL, "%s", "Out of memory (CSV_farr)");
