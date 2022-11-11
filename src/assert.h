@@ -50,10 +50,10 @@ extern int memcmp(const void *a, const void *b, unsigned long l);
 /*
  *  if as_ is false log a error and exit whith status 1
  */
-#define assert(c_) assertf(c_, "assertion error")
+#define assert(c_) assertf(c_, "%s", "assertion error")
 /*
  *  if as_ is false log a error and goto lbl
  */
-#define assert_to(c_, lbl) assertf_to(c_, lbl, "assertion error")
+#define assert_to(c_, lbl) assertf_to(c_, lbl, "%s", "assertion error")
 
 #endif /* _UL_ASSERT_H_ */
