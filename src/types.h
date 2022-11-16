@@ -29,6 +29,4 @@ typedef float              f32_t;
 typedef double             f64_t;
 
 
-typedef i32_t (*compare_f)(const void *a, const void *b);
-
 #endif /* _TYPES_H_ */
